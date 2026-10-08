@@ -1,0 +1,112 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  control-plane-and-agent:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install Platform API
+        shell: pwsh
+        run: |
+          python -m venv services/platform-api/.venv
+          & services/platform-api/.venv/Scripts/python.exe -m pip install --upgrade pip
+          & services/platform-api/.venv/Scripts/python.exe -m pip install --constraint services/platform-api/requirements-dev.lock --editable "./services/platform-api[dev]"
+
+      - name: Check Platform API
+        shell: pwsh
+        run: |
+          & services/platform-api/.venv/Scripts/python.exe -m ruff check services/platform-api/src services/platform-api/tests
+          Push-Location services/platform-api
+          & .venv/Scripts/python.exe -m pytest -p no:cacheprovider
+          Pop-Location
+
+      - name: Validate Catalog and immutable artifacts
+        shell: pwsh
+        run: .\scripts\check-repository.cmd
+
+      - name: Install Edge Agent
+        shell: pwsh
+        run: |
+          python -m venv services/edge-agent/.venv
+          & services/edge-agent/.venv/Scripts/python.exe -m pip install --upgrade pip
+          & services/edge-agent/.venv/Scripts/python.exe -m pip install --constraint services/edge-agent/requirements-dev.lock --editable "./services/edge-agent[dev]"
+
+      - name: Check Edge Agent
+        shell: pwsh
+        run: |
+          & services/edge-agent/.venv/Scripts/python.exe -m ruff check services/edge-agent/src services/edge-agent/tests
+          Push-Location services/edge-agent
+          & .venv/Scripts/python.exe -m pytest -p no:cacheprovider
+          Pop-Location
+
+  runtimes:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install simulation runtimes
+        shell: pwsh
+        run: |
+          python -m venv simulation-runtimes/mujoco-arm/.venv
+          & simulation-runtimes/mujoco-arm/.venv/Scripts/python.exe -m pip install --upgrade pip
+          & simulation-runtimes/mujoco-arm/.venv/Scripts/python.exe -m pip install --editable "./simulation-runtimes/mujoco-arm[dev]"
+          & simulation-runtimes/mujoco-arm/.venv/Scripts/python.exe -m pip install --editable ./simulation-runtimes/windows-webcam-yolox-mujoco
+
+      - name: Check MuJoCo runtime
+        shell: pwsh
+        run: |
+          & simulation-runtimes/mujoco-arm/.venv/Scripts/python.exe -m ruff check simulation-runtimes/mujoco-arm/src simulation-runtimes/mujoco-arm/tests
+          Push-Location simulation-runtimes/mujoco-arm
+          & .venv/Scripts/python.exe -m pytest -p no:cacheprovider
+          Pop-Location
+
+      - name: Check Windows visual closed loop runtime
+        shell: pwsh
+        run: |
+          & simulation-runtimes/mujoco-arm/.venv/Scripts/python.exe -m ruff check simulation-runtimes/windows-webcam-yolox-mujoco/src simulation-runtimes/windows-webcam-yolox-mujoco/tests
+          Push-Location simulation-runtimes/windows-webcam-yolox-mujoco
+          & ../mujoco-arm/.venv/Scripts/python.exe -m pytest -p no:cacheprovider
+          Pop-Location
+
+  studio:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: apps/studio/package-lock.json
+
+      - name: Build Web Studio
+        working-directory: apps/studio
+        run: npm ci && npm run build

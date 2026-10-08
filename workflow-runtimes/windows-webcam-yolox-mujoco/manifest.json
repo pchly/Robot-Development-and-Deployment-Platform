@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0",
+  "workflow_runtime_id": "runtime.windows-webcam-yolox-mujoco",
+  "version": "0.1.5",
+  "name": "Windows摄像头YOLOX手机检测驱动MuJoCo机械臂",
+  "components": [
+    "hardware.camera.windows-webcam",
+    "algorithm.vision.yolox_onnx",
+    "algorithm.motion.detection_to_sim_target",
+    "algorithm.motion.safety_gate",
+    "hardware.arm.mujoco"
+  ],
+  "input": "Windows摄像头RGB画面",
+  "output": "手机检测结果、仿真运动状态与组合预览",
+  "deployment_recipe": {
+    "recipe_id": "workflow.windows_webcam_yolox_mujoco",
+    "version": "0.1.5",
+    "name": "Windows摄像头识别手机→MuJoCo机械臂",
+    "components": [
+      {
+        "node_id": "camera",
+        "component_ref": "hardware.camera.windows-webcam",
+        "component_version": "0.1.0"
+      },
+      {
+        "node_id": "detector",
+        "component_ref": "algorithm.vision.yolox_onnx",
+        "component_version": "0.1.0"
+      },
+      {
+        "node_id": "target_mapper",
+        "component_ref": "algorithm.motion.detection_to_sim_target",
+        "component_version": "0.1.0"
+      },
+      {
+        "node_id": "safety_gate",
+        "component_ref": "algorithm.motion.safety_gate",
+        "component_version": "0.1.0"
+      },
+      {
+        "node_id": "arm",
+        "component_ref": "hardware.arm.mujoco",
+        "component_version": "0.1.0"
+      }
+    ],
+    "links": [
+      {
+        "source": {"node_id": "camera", "port": "color"},
+        "target": {"node_id": "detector", "port": "image"}
+      },
+      {
+        "source": {"node_id": "detector", "port": "detections"},
+        "target": {"node_id": "target_mapper", "port": "detections"}
+      },
+      {
+        "source": {"node_id": "target_mapper", "port": "command"},
+        "target": {"node_id": "safety_gate", "port": "command"}
+      },
+      {
+        "source": {"node_id": "safety_gate", "port": "safe_command"},
+        "target": {"node_id": "arm", "port": "command"}
+      }
+    ],
+    "required_capabilities": [
+      "hardware.camera.windows-webcam",
+      "simulation",
+      "simulation.mujoco",
+      "inference.onnxruntime.cpu",
+      "actuator.safety.v1",
+      "actuator.safety-gate.v1",
+      "artifact.inventory.v1"
+    ],
+    "required_artifact_ids": [
+      "hardware.camera.windows-webcam.edge-plugin",
+      "simulation.mujoco.arm.runtime",
+      "runtime.windows-webcam-yolox-mujoco.runtime-package"
+    ]
+  },
+  "safety": {
+    "robot_motion_output": false,
+    "simulation_only": true,
+    "requires_independent_safety_gate": true,
+    "image_to_workspace_mapping_is_not_robot_calibration": true
+  }
+}

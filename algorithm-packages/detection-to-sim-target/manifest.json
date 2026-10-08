@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0",
+  "algorithm_id": "algorithm.motion.detection_to_sim_target",
+  "implementation_id": "bounded-image-workspace-mapper",
+  "version": "0.1.0",
+  "name": "检测框到仿真目标映射器",
+  "category": "motion.target_mapping.simulation",
+  "license": "Apache-2.0",
+  "readiness": "validated",
+  "artifact_formats": ["builtin-python"],
+  "inputs": [
+    {"name": "detections", "data_type": "vision.detections.v1"}
+  ],
+  "outputs": [
+    {"name": "command", "data_type": "robot.motion.command.v1"}
+  ],
+  "parameters": [
+    {
+      "key": "minimum_confidence",
+      "label": "触发动作最低置信度",
+      "value_type": "number",
+      "default": 0.5,
+      "minimum": 0.01,
+      "maximum": 0.99,
+      "step": 0.01
+    },
+    {
+      "key": "target_x_m",
+      "label": "目标前向距离（米）",
+      "value_type": "number",
+      "default": 0.35,
+      "minimum": 0.15,
+      "maximum": 0.65,
+      "step": 0.01
+    },
+    {
+      "key": "horizontal_span_m",
+      "label": "画面横向映射范围（米）",
+      "value_type": "number",
+      "default": 0.4,
+      "minimum": 0.05,
+      "maximum": 0.8,
+      "step": 0.01
+    },
+    {
+      "key": "vertical_span_m",
+      "label": "画面纵向映射范围（米）",
+      "value_type": "number",
+      "default": 0.3,
+      "minimum": 0.05,
+      "maximum": 0.6,
+      "step": 0.01
+    },
+    {
+      "key": "center_z_m",
+      "label": "画面中心高度（米）",
+      "value_type": "number",
+      "default": 0.4,
+      "minimum": 0.15,
+      "maximum": 0.7,
+      "step": 0.01
+    }
+  ]
+}

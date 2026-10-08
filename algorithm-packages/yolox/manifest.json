@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0",
+  "algorithm_id": "algorithm.vision.yolo",
+  "implementation_id": "yolox",
+  "version": "0.1.0",
+  "name": "YOLOX Object Detector",
+  "category": "vision.object_detection",
+  "license": "Apache-2.0",
+  "readiness": "validated",
+  "artifact_formats": ["onnx", "tensorrt-engine"],
+  "inputs": [
+    {"name": "image", "data_type": "image.rgb8.v1"}
+  ],
+  "outputs": [
+    {"name": "detections", "data_type": "vision.detections.v1"}
+  ],
+  "parameters": [
+    {
+      "key": "model_id",
+      "label": "模型ID",
+      "value_type": "string",
+      "default": "yolox.nano.coco",
+      "visible": false
+    },
+    {
+      "key": "engine_path",
+      "label": "TensorRT Engine",
+      "value_type": "string",
+      "default": "/data/robot-platform/cache/tensorrt/yolox-nano-c789161e-sm87-trt10.3-fp16/yolox_nano-fp16.engine",
+      "visible": false
+    },
+    {
+      "key": "confidence",
+      "label": "置信度阈值",
+      "value_type": "number",
+      "default": 0.3,
+      "minimum": 0.01,
+      "maximum": 0.99,
+      "step": 0.01
+    },
+    {
+      "key": "nms",
+      "label": "NMS阈值",
+      "value_type": "number",
+      "default": 0.45,
+      "visible": false
+    },
+    {
+      "key": "duration_seconds",
+      "label": "最长运行时间",
+      "value_type": "integer",
+      "default": 86400,
+      "visible": false
+    }
+  ],
+  "models": ["models/yolox_nano.json"],
+  "runtime": {
+    "isolation": "oci",
+    "architecture": "aarch64",
+    "base_image": "nvcr.io/nvidia/l4t-tensorrt@sha256:602c0972ae069fc3dcb4dfab6476e40dfbc7a38b6c704aeea5339ea797423eb6",
+    "cuda": "12.6",
+    "tensorrt": "10.3.0",
+    "python": "3.10",
+    "gpu": "Jetson AGX Orin",
+    "engine_precision": "fp16",
+    "engine_cache_root": "/data/robot-platform/cache/tensorrt",
+    "engine_artifact": {
+      "path": "/data/robot-platform/cache/tensorrt/yolox-nano-c789161e-sm87-trt10.3-fp16/yolox_nano-fp16.engine",
+      "sha256": "719df3d33f1924f06925fa3c96030e4b4a51c110138f9a5b55709bdf53c31e17",
+      "distribution": {
+        "file": "dist/yolox_nano-fp16.engine",
+        "sha256": "719df3d33f1924f06925fa3c96030e4b4a51c110138f9a5b55709bdf53c31e17"
+      }
+    },
+    "runtime_image": "robot-platform/yolox-runtime:0.1.2-trt10.3"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.1",
+  "artifact_id": "calibration.camera.mock-to-mujoco-arm",
+  "name": "模拟 RGB-D 相机到 MuJoCo 机械臂标定",
+  "kind": "calibration_profile",
+  "scope": "edge_runtime",
+  "version": "1.0.0",
+  "locator": "mock-camera-to-mujoco-arm-v1",
+  "source_ref": "calibration.camera.mock-to-mujoco-arm",
+  "distribution": {
+    "file": "dist/mock-camera-to-mujoco-arm-v1.json",
+    "sha256": "21ddf283acc4c5723474d2c5571222927d9f49a6c860ead60110e06ffbf24bdb"
+  }
+}

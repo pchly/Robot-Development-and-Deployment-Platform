@@ -1,0 +1,45 @@
+[Unit]
+Description=机器人开发平台 Edge Agent
+Documentation=file:///data/robot-platform/edge-agent/current/deploy/jetson/README.md
+Wants=network-online.target
+After=network-online.target
+StartLimitIntervalSec=60
+StartLimitBurst=5
+ConditionPathExists=/data/robot-platform/edge-agent/current/src/robot_edge_agent/__main__.py
+
+[Service]
+Type=simple
+User=@SERVICE_USER@
+Group=@SERVICE_GROUP@
+SupplementaryGroups=docker
+WorkingDirectory=/data/robot-platform/edge-agent/current
+EnvironmentFile=/etc/robot-platform/edge-agent.env
+Environment=PYTHONPATH=/data/robot-platform/edge-agent/current/src:/data/robot-platform/edge-agent/plugins
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/usr/bin/python3 -m robot_edge_agent --server-url ${ROBOT_PLATFORM_SERVER_URL} --agent-id ${ROBOT_EDGE_AGENT_ID} --name ${ROBOT_EDGE_AGENT_NAME} --capability jetson --capability runtime.docker --capability camera.realsense --capability inference.tensorrt
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=15
+KillSignal=SIGINT
+
+# Agent只写受管运行目录、插件版本库和制品暂存目录；实际设备访问由隔离Runtime负责。
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=false
+ProtectSystem=strict
+ReadWritePaths=/data/robot-platform/runs /data/robot-platform/edge-agent/plugins /data/robot-platform/edge-agent/staging /data/robot-platform/edge-agent/calibrations /data/robot-platform/cache/tensorrt
+ProtectHome=true
+ProtectHostname=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+CapabilityBoundingSet=
+AmbientCapabilities=
+UMask=0027
+
+[Install]
+WantedBy=multi-user.target

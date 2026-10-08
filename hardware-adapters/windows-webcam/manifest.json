@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0",
+  "adapter_id": "hardware.camera.windows-webcam",
+  "version": "0.1.0",
+  "name": "Windows USB摄像头",
+  "vendor": "Generic",
+  "category": "camera.rgb",
+  "readiness": "validated",
+  "discovery": {
+    "transport": "usb",
+    "product_name_contains": ["Camera"]
+  },
+  "host_requirements": {
+    "operating_system": "Windows",
+    "architectures": ["x86_64"],
+    "capture_backend": "Media Foundation / DirectShow"
+  },
+  "edge_plugin": {
+    "distribution": "robot-hardware-windows-webcam",
+    "version": "0.1.2",
+    "entry_point_group": "robot_platform.hardware_adapters",
+    "entry_point": "windows_webcam",
+    "dependency_policy": "host-opencv",
+    "wheel_file": "dist/robot_hardware_windows_webcam-0.1.2-py3-none-any.whl",
+    "wheel_sha256": "9660b339f1f50025d16b7610f2c083f398aa1a6c1dc4227ab111e81ea916cdb1"
+  },
+  "outputs": [
+    {"name": "color", "data_type": "image.rgb8.v1"}
+  ],
+  "parameters": [
+    {
+      "key": "camera_index",
+      "label": "Windows摄像头",
+      "value_type": "string",
+      "default": "0",
+      "binding_source": "target_hardware_devices"
+    },
+    {
+      "key": "width",
+      "label": "图像宽度",
+      "value_type": "integer",
+      "default": 640,
+      "visible": false
+    },
+    {
+      "key": "height",
+      "label": "图像高度",
+      "value_type": "integer",
+      "default": 480,
+      "visible": false
+    },
+    {
+      "key": "fps",
+      "label": "目标帧率",
+      "value_type": "integer",
+      "default": 15,
+      "minimum": 1,
+      "maximum": 30
+    }
+  ]
+}

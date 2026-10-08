@@ -1,0 +1,11 @@
+# 由 Windows / Python 3.14.6 验证环境生成，用作开发依赖约束。
+# 安装命令：python -m pip install -c requirements-dev.lock -e ".[dev]"
+colorama==0.4.6
+coverage==7.16.2
+iniconfig==2.3.0
+packaging==26.3
+pluggy==1.6.0
+Pygments==2.21.0
+pytest==8.4.2
+pytest-cov==6.3.0
+ruff==0.16.9

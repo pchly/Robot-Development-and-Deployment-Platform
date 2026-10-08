@@ -1,0 +1,109 @@
+{
+  "schema_version": "1.0",
+  "status": "sample_image_semantic_passed",
+  "validated_at": "2026-10-03",
+  "target": {
+    "device": "Jetson AGX Orin",
+    "compute_capability": "8.7",
+    "sm_count": 16,
+    "jetpack": "6.2.3",
+    "l4t": "36.5.2",
+    "cuda": "12.6",
+    "tensorrt": "10.3.0"
+  },
+  "builder": {
+    "image": "nvcr.io/nvidia/l4t-tensorrt@sha256:602c0972ae069fc3dcb4dfab6476e40dfbc7a38b6c704aeea5339ea797423eb6",
+    "precision": "fp16",
+    "workspace_mib": 1024,
+    "optimization_level": 3,
+    "build_seconds": 343.458,
+    "onnx_ir_version": "0.0.6",
+    "onnx_opset": 11,
+    "network_inputs": 1,
+    "network_outputs": 1
+  },
+  "source_model": {
+    "sha256": "c789161ed43c8269fcd4e67c67eeeb4e80c622da2eb296a20bc6007bd18a0b7d"
+  },
+  "engine": {
+    "filename": "yolox_nano-fp16.engine",
+    "size_mib": 3.33034,
+    "sha256": "719df3d33f1924f06925fa3c96030e4b4a51c110138f9a5b55709bdf53c31e17"
+  },
+  "synthetic_benchmark": {
+    "power_mode": "MAXN",
+    "warmup_ms": 1000,
+    "duration_s": 10.0039,
+    "queries": 6739,
+    "throughput_qps": 673.64,
+    "host_latency_ms": {
+      "mean": 1.61345,
+      "p95": 1.62207,
+      "p99": 1.66016,
+      "max": 4.78809
+    },
+    "gpu_compute_ms": {
+      "mean": 1.48294,
+      "p95": 1.48877,
+      "p99": 1.50488,
+      "max": 4.65039
+    },
+    "h2d_mean_ms": 0.0858277,
+    "d2h_mean_ms": 0.04468,
+    "result": "passed",
+    "interpretation": "synthetic_engine_only_not_end_to_end"
+  },
+  "image_semantic_validation": {
+    "first_attempt_at": "2026-10-03",
+    "status": "passed",
+    "runtime_image": "robot-platform/yolox-runtime:0.1.0-trt10.3",
+    "failure_stage": "python_import",
+    "failure": "Ubuntu OpenCV built for NumPy 1.x could not import with base-image NumPy 2.1.1",
+    "remediation": "runtime 0.1.1 selects distro NumPy 1.x",
+    "second_attempt": {
+      "runtime_image": "robot-platform/yolox-runtime:0.1.1-trt10.3",
+      "failure_stage": "docker_build_import_gate",
+      "failure": "TensorRT import could not resolve host libnvdla_compiler during docker build",
+      "interpretation": "TensorRT requires Jetson host libraries injected by the NVIDIA container runtime",
+      "remediation": "runtime 0.1.2 checks numpy/cv2 at build time and checks tensorrt after launch with --runtime nvidia"
+    },
+    "successful_attempt": {
+      "runtime_image": "robot-platform/yolox-runtime:0.1.2-trt10.3",
+      "local_image_id": "sha256:0b6fdd7ed244f89d926b8f3b15b85abaa4bfe70b6983e99dbf8fa3fc426d0bc1",
+      "dependencies": {
+        "numpy": "1.21.5",
+        "opencv": "4.5.4",
+        "tensorrt": "10.3.0"
+      },
+      "sample_image": {
+        "filename": "dog.jpg",
+        "sha256": "5a9522051c3cec2bbd2f6323fccba32e8fbf3ddcc2b3e2fd46b04c720bc6f866",
+        "width": 768,
+        "height": 576
+      },
+      "thresholds": {
+        "confidence": 0.3,
+        "nms": 0.45
+      },
+      "metrics_ms": {
+        "preprocess": 6.846,
+        "h2d": 0.435,
+        "first_inference": 38.418,
+        "d2h": 1.02,
+        "postprocess": 3.245,
+        "cold_start_total": 202.575
+      },
+      "detections": [
+        {"class_id": 16, "label": "dog", "confidence": 0.855911},
+        {"class_id": 1, "label": "bicycle", "confidence": 0.803644},
+        {"class_id": 2, "label": "car", "confidence": 0.798077}
+      ],
+      "result": "passed",
+      "interpretation": "semantic output and pixel-space boxes match the official validation image; timings are a cold single-shot run"
+    }
+  },
+  "remaining": [
+    "recorded_video_runtime",
+    "realsense_fused_runtime"
+  ]
+}

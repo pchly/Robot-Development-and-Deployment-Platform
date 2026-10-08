@@ -1,0 +1,43 @@
+{
+  "schema": "robot.calibration.camera-to-arm.v1",
+  "calibration_id": "mock-camera-to-mujoco-arm-v1",
+  "version": "1.0.0",
+  "source": {
+    "frame_id": "camera_optical",
+    "device": {
+      "transport": "simulation",
+      "device_id": "mock-rgbd-camera-01"
+    },
+    "intrinsics": {
+      "width_px": 640,
+      "height_px": 480,
+      "fx_px": 600.0,
+      "fy_px": 600.0,
+      "cx_px": 320.0,
+      "cy_px": 240.0
+    }
+  },
+  "target": {
+    "frame_id": "arm_base",
+    "device": {
+      "adapter_id": "hardware.arm.mujoco",
+      "device_id": "mujoco-six-axis-01"
+    }
+  },
+  "transform": {
+    "translation_m": {
+      "x": 0.25,
+      "y": 0.1,
+      "z": 0.0
+    },
+    "rotation_rpy_rad": {
+      "roll": 0.0,
+      "pitch": 0.0,
+      "yaw": 0.0
+    }
+  },
+  "quality": {
+    "method": "simulation_ground_truth",
+    "rmse_m": 0.0
+  }
+}

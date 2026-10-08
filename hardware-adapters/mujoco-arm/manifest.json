@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "adapter_id": "hardware.arm.mujoco",
+  "version": "0.1.0",
+  "name": "MuJoCo 六轴虚拟机械臂",
+  "vendor": "Robot Platform",
+  "category": "manipulator.arm.simulation",
+  "readiness": "validated",
+  "discovery": {
+    "transport": "simulation"
+  },
+  "inputs": [
+    {
+      "name": "command",
+      "data_type": "robot.motion.command.v1"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "state",
+      "data_type": "robot.motion.state.v1"
+    },
+    {
+      "name": "fault",
+      "data_type": "robot.fault.v1",
+      "required": false
+    }
+  ],
+  "parameters": [
+    {
+      "key": "command_timeout_ms",
+      "label": "命令超时（毫秒）",
+      "value_type": "integer",
+      "default": 500,
+      "minimum": 100,
+      "maximum": 5000,
+      "step": 100
+    },
+    {
+      "key": "max_velocity_scale",
+      "label": "最大速度比例",
+      "value_type": "number",
+      "default": 0.2,
+      "minimum": 0.01,
+      "maximum": 1,
+      "step": 0.01
+    },
+    {
+      "key": "simulation_steps",
+      "label": "单次仿真步数",
+      "value_type": "integer",
+      "default": 1000,
+      "minimum": 1,
+      "maximum": 10000,
+      "step": 100
+    }
+  ]
+}

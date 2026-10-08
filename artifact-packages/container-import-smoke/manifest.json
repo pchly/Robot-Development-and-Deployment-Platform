@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "artifact_id": "validation.container-import-smoke.runtime-image",
+  "name": "Container Import Smoke Image",
+  "kind": "container_image",
+  "scope": "edge_runtime",
+  "version": "0.1.0",
+  "locator": "robot-platform/container-import-smoke:0.1.0",
+  "digest": "sha256:4c5b95b9366a8a6d5f1a983f80879b17c38e96bfbd1269f2f7f52c7887c808b1",
+  "architecture": "aarch64",
+  "source_ref": "validation.container-import-smoke",
+  "distribution": {
+    "file": "dist/container-import-smoke-0.1.0-docker-save.tar",
+    "sha256": "a0f1dad14d6fe146da67201f50efa28f5cfac00465bca5f4f8e169c2ea231d68"
+  }
+}

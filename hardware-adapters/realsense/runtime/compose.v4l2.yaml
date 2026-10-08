@@ -1,0 +1,18 @@
+name: robot-platform-realsense-validation
+
+services:
+  realsense-probe:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        BASE_IMAGE: "${REALSENSE_BASE_IMAGE:-ubuntu:22.04}"
+        LIBREALSENSE_VERSION: v2.58.4
+        FORCE_RSUSB_BACKEND: "OFF"
+    image: robot-platform/realsense-runtime:0.1.0-v4l2
+    network_mode: none
+    volumes:
+      - /dev:/dev
+    device_cgroup_rules:
+      - "c 81:* rw"
+      - "c 189:* rw"

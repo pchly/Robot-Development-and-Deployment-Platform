@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.1",
+  "artifact_id": "runtime.windows-webcam-yolox-mujoco.runtime-package",
+  "name": "Windows Webcam YOLOX MuJoCo Runtime",
+  "kind": "runtime_package",
+  "scope": "edge_runtime",
+  "version": "0.2.0",
+  "source_ref": "runtime.windows-webcam-yolox-mujoco",
+  "variants": [
+    {
+      "variant_id": "windows-amd64-python",
+      "locator": "robot-windows-webcam-yolox-mujoco-runtime",
+      "architecture": "x86_64",
+      "compatibility": {
+        "operating_system": "Windows",
+        "architecture": "x86_64",
+        "required_capabilities": [
+          "simulation.mujoco",
+          "inference.onnxruntime.cpu"
+        ]
+      },
+      "distribution": {
+        "wheel_file": "dist/robot_windows_webcam_yolox_mujoco_runtime-0.2.0-py3-none-any.whl",
+        "wheel_sha256": "7bb267e47b85cdae0b01012f39348a9e117250514322b3707f00f1ee8de28752"
+      },
+      "priority": 10
+    }
+  ]
+}

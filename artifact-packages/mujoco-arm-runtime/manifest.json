@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.1",
+  "artifact_id": "simulation.mujoco.arm.runtime",
+  "name": "MuJoCo 六轴机械臂 Runtime",
+  "kind": "runtime_package",
+  "scope": "edge_runtime",
+  "version": "0.4.0",
+  "source_ref": "simulation.mujoco.arm",
+  "variants": [
+    {
+      "variant_id": "windows-amd64-python",
+      "locator": "robot-mujoco-arm-runtime",
+      "architecture": "x86_64",
+      "compatibility": {
+        "operating_system": "Windows",
+        "architecture": "x86_64",
+        "required_capabilities": ["simulation.mujoco"]
+      },
+      "distribution": {
+        "wheel_file": "dist/robot_mujoco_arm_runtime-0.4.0-py3-none-any.whl",
+        "wheel_sha256": "1d0e8541c8244c2d0e91c544ee33e52fd215f7bf3d63a607751359f681d0c571"
+      },
+      "priority": 10
+    },
+    {
+      "variant_id": "linux-arm64-python",
+      "locator": "robot-mujoco-arm-runtime",
+      "architecture": "aarch64",
+      "compatibility": {
+        "operating_system": "Linux",
+        "architecture": "aarch64",
+        "required_capabilities": ["simulation.mujoco"]
+      },
+      "distribution": {
+        "wheel_file": "dist/robot_mujoco_arm_runtime-0.4.0-py3-none-any.whl",
+        "wheel_sha256": "1d0e8541c8244c2d0e91c544ee33e52fd215f7bf3d63a607751359f681d0c571"
+      }
+    }
+  ]
+}

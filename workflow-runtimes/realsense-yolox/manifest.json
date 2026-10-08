@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0",
+  "workflow_runtime_id": "runtime.realsense-yolox",
+  "version": "0.1.3",
+  "name": "RealSense YOLOX Edge Runtime",
+  "architecture": "aarch64",
+  "target": "Jetson AGX Orin",
+  "components": [
+    "hardware.camera.realsense",
+    "algorithm.vision.yolo"
+  ],
+  "input": "RealSense RGB8",
+  "output": "vision.detections.v1",
+  "runtime_image": "robot-platform/realsense-yolox-runtime:0.1.3",
+  "deployment_recipe": {
+    "recipe_id": "workflow.realsense_yolox",
+    "version": "0.1.1",
+    "name": "RealSense D415实时目标检测",
+    "components": [
+      {
+        "node_id": "camera",
+        "component_ref": "hardware.camera.realsense",
+        "component_version": "0.1.0"
+      },
+      {
+        "node_id": "detector",
+        "component_ref": "algorithm.vision.yolo",
+        "component_version": "0.1.0"
+      }
+    ],
+    "links": [
+      {
+        "source": {"node_id": "camera", "port": "color"},
+        "target": {"node_id": "detector", "port": "image"}
+      }
+    ],
+    "required_capabilities": [
+      "jetson",
+      "runtime.docker",
+      "camera.realsense",
+      "inference.tensorrt",
+      "artifact.inventory.v1"
+    ],
+    "required_artifact_ids": [
+      "hardware.camera.realsense.edge-plugin",
+      "runtime.realsense-yolox.runtime-image",
+      "algorithm.vision.yolo.tensorrt-engine"
+    ]
+  },
+  "safety": {
+    "robot_motion_output": false,
+    "network_required": false,
+    "privileged_required": false
+  }
+}

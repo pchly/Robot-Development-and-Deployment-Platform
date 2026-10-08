@@ -1,0 +1,24 @@
+ARG BASE_IMAGE=nvcr.io/nvidia/l4t-tensorrt@sha256:602c0972ae069fc3dcb4dfab6476e40dfbc7a38b6c704aeea5339ea797423eb6
+FROM ${BASE_IMAGE}
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+# 基础镜像自带的pip NumPy 2.x与Ubuntu 22.04的OpenCV二进制ABI不兼容。
+# 优先使用同一发行版仓库中配套构建的NumPy/OpenCV，并在构建阶段执行ABI导入门禁。
+ENV PYTHONPATH=/usr/lib/python3/dist-packages
+
+RUN python3 -m pip uninstall --yes numpy || true \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends \
+        python3-numpy \
+        python3-opencv \
+    && rm -rf /var/lib/apt/lists/*
+
+# TensorRT导入依赖Jetson宿主通过NVIDIA Runtime注入libnvdla_compiler等驱动库，
+# 因此这里只检查镜像内自包含的NumPy/OpenCV；TensorRT由构建脚本在容器启动后检查。
+RUN python3 -c "import cv2, numpy; assert int(numpy.__version__.split('.')[0]) < 2; print('镜像内依赖检查通过:', 'numpy=' + numpy.__version__, 'opencv=' + cv2.__version__)"
+
+WORKDIR /opt/robot-runtime
+COPY infer_image.py /opt/robot-runtime/infer_image.py
+
+ENTRYPOINT ["python3", "/opt/robot-runtime/infer_image.py"]

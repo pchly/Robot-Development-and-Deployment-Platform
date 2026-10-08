@@ -1,0 +1,27 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "robot-hardware-windows-webcam"
+version = "0.1.2"
+description = "Windows webcam discovery plugin for the robot development platform"
+requires-python = ">=3.11,<3.15"
+dependencies = ["robot-edge-agent>=0.19.0,<1"]
+
+[project.entry-points."robot_platform.hardware_adapters"]
+windows_webcam = "robot_hardware_windows_webcam.adapter:WindowsWebcamAdapter"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/robot_hardware_windows_webcam"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src", "../../services/edge-agent/src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]

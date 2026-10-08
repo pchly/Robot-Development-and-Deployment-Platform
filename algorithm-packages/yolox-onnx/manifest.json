@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "algorithm_id": "algorithm.vision.yolox_onnx",
+  "implementation_id": "yolox-onnxruntime-cpu",
+  "version": "0.1.0",
+  "name": "YOLOX ONNX目标检测器",
+  "category": "vision.object_detection",
+  "license": "Apache-2.0",
+  "readiness": "validated",
+  "artifact_formats": ["onnx"],
+  "inputs": [
+    {"name": "image", "data_type": "image.rgb8.v1"}
+  ],
+  "outputs": [
+    {"name": "detections", "data_type": "vision.detections.v1"}
+  ],
+  "parameters": [
+    {
+      "key": "model_id",
+      "label": "模型ID",
+      "value_type": "string",
+      "default": "yolox.nano.coco",
+      "visible": false
+    },
+    {
+      "key": "target_label",
+      "label": "目标类别",
+      "value_type": "string",
+      "default": "cell phone"
+    },
+    {
+      "key": "confidence",
+      "label": "置信度阈值",
+      "value_type": "number",
+      "default": 0.3,
+      "minimum": 0.01,
+      "maximum": 0.99,
+      "step": 0.01
+    },
+    {
+      "key": "nms",
+      "label": "NMS阈值",
+      "value_type": "number",
+      "default": 0.45,
+      "visible": false
+    }
+  ]
+}

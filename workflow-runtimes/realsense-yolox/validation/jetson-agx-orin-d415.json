@@ -1,0 +1,176 @@
+{
+  "schema_version": "1.0",
+  "status": "web_preview_passed",
+  "target": {
+    "edge": "Jetson AGX Orin",
+    "camera": "RealSense D415",
+    "camera_sdk_serial": "125322060182",
+    "runtime_image": "robot-platform/realsense-yolox-runtime:0.1.2",
+    "model": "yolox.nano.coco",
+    "engine_sha256": "719df3d33f1924f06925fa3c96030e4b4a51c110138f9a5b55709bdf53c31e17"
+  },
+  "smoke_config": {
+    "duration_s": 30,
+    "width": 640,
+    "height": 480,
+    "fps": 30,
+    "warmup_frames": 10,
+    "confidence": 0.3,
+    "nms": 0.45,
+    "latest_frame_capacity": 1
+  },
+  "acceptance": {
+    "process_exits_cleanly": true,
+    "minimum_inference_fps": 5,
+    "maximum_pipeline_p95_ms": 200,
+    "summary_json_written": true,
+    "annotated_image_written": true,
+    "robot_motion_output": false
+  },
+  "attempts": {
+    "first": {
+      "date": "2026-10-03",
+      "result": "failed_before_camera_start",
+      "failure": "non-root container could not initialize Jetson nvmap/nvhost devices; CUDA returned error 999",
+      "remediation": "run the hardware smoke container as root without privileged mode, then restore artifact ownership"
+    },
+    "second": {
+      "date": "2026-10-03",
+      "runtime_image": "robot-platform/realsense-yolox-runtime:0.1.0",
+      "result": "performance_passed_semantic_not_observed",
+      "metrics": {
+        "elapsed_s": 30.107,
+        "captured_frames": 867,
+        "inferred_frames": 856,
+        "dropped_frames": 0,
+        "capture_fps": 28.797,
+        "inference_fps": 28.432,
+        "inference_mean_ms": 5.924,
+        "inference_p95_ms": 6.78,
+        "pipeline_mean_ms": 11.917,
+        "pipeline_p95_ms": 15.695
+      },
+      "semantic_result": "no detections above confidence 0.3 in periodic or final frame evidence",
+      "remediation": "runtime 0.1.1 aggregates detections across the run and saves the highest-confidence evidence frame"
+    },
+    "third": {
+      "date": "2026-10-03",
+      "runtime_image": "robot-platform/realsense-yolox-runtime:0.1.1",
+      "result": "realtime_semantic_smoke_passed",
+      "metrics": {
+        "elapsed_s": 31.077,
+        "captured_frames": 868,
+        "inferred_frames": 857,
+        "dropped_frames": 0,
+        "frames_with_detections": 727,
+        "detection_frame_ratio": 0.8483,
+        "total_detections": 797,
+        "capture_fps": 27.931,
+        "inference_fps": 27.577,
+        "inference_mean_ms": 5.938,
+        "inference_p95_ms": 6.874,
+        "pipeline_mean_ms": 12.302,
+        "pipeline_p95_ms": 16.886
+      },
+      "labels_seen": {
+        "person": 739,
+        "tie": 21,
+        "sink": 14,
+        "cell phone": 9,
+        "keyboard": 8,
+        "tv": 5,
+        "chair": 1
+      },
+      "best_detection": {
+        "label": "person",
+        "confidence": 0.924987,
+        "bbox_xywh_pixels": [187.045, 3.202, 451.955, 471.672]
+      },
+      "artifacts": {
+        "directory": "/data/robot-platform/validation/realsense-yolox-smoke-20261003-091644",
+        "summary": "summary.json",
+        "source": "source.jpg",
+        "annotated": "annotated.jpg"
+      }
+    },
+    "fourth": {
+      "date": "2026-10-03",
+      "result": "edge_orchestration_start_passed",
+      "plan_id": "plan-df2b13d7e91008c43f76",
+      "container_name": "robot-plan-df2b13d7e91008c43f76",
+      "runtime_image": "robot-platform/realsense-yolox-runtime:0.1.1",
+      "control_path": "Studio -> Platform API -> Edge Agent -> Docker Runtime",
+      "observed_status": "running",
+      "metrics": {
+        "captured_frames": 870,
+        "inferred_frames": 860,
+        "dropped_frames": 0,
+        "latest_detection_count": 1,
+        "frames_with_detections": 843,
+        "inference_mean_ms": 5.825,
+        "pipeline_p95_ms": 14.656,
+        "configured_fps": 30
+      },
+      "stop_validation": {
+        "result": "passed",
+        "container_removed": true,
+        "artifacts_retained": [
+          "summary.json",
+          "source.jpg",
+          "annotated.jpg"
+        ],
+        "agent_errors_after_upgrade": false
+      }
+    },
+    "fifth": {
+      "date": "2026-10-03",
+      "result": "web_preview_passed",
+      "runtime_image": "robot-platform/realsense-yolox-runtime:0.1.2",
+      "runtime_image_digest": "sha256:dd1bb37d157188200c3470a158dcb4e73bdb974f6f35bf49bb4d3375a2d25871",
+      "edge_agent_version": "0.3.0",
+      "control_path": "Runtime preview.jpg -> Edge Agent -> Platform API latest-preview cache -> Studio",
+      "smoke_metrics": {
+        "elapsed_s": 31.091,
+        "captured_frames": 869,
+        "inferred_frames": 858,
+        "dropped_frames": 0,
+        "frames_with_detections": 28,
+        "capture_fps": 27.95,
+        "inference_fps": 27.597,
+        "inference_mean_ms": 5.916,
+        "inference_p95_ms": 6.761,
+        "pipeline_mean_ms": 11.823,
+        "pipeline_p95_ms": 15.081
+      },
+      "smoke_best_detection": {
+        "label": "tv",
+        "confidence": 0.395284
+      },
+      "web_observation": {
+        "preview_visible": true,
+        "annotation_visible": true,
+        "label": "person",
+        "confidence": 0.70,
+        "captured_frames": 573,
+        "inferred_frames": 563,
+        "dropped_frames": 0,
+        "frames_with_detections": 173,
+        "inference_mean_ms": 5.909,
+        "pipeline_p95_ms": 15.435,
+        "configured_fps": 30
+      },
+      "artifacts": {
+        "directory": "/data/robot-platform/validation/realsense-yolox-smoke-20261003-101235",
+        "summary": "summary.json",
+        "source": "source.jpg",
+        "annotated": "annotated.jpg",
+        "preview": "preview.jpg"
+      }
+    }
+  },
+  "remaining": [
+    "camera_disconnect_and_recovery",
+    "platform_api_disconnect_continuity",
+    "thirty_minute_soak"
+  ]
+}

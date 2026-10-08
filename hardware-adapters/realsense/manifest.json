@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0",
+  "adapter_id": "hardware.camera.realsense",
+  "version": "0.1.0",
+  "name": "RealSense RGB-D Camera",
+  "vendor": "RealSense",
+  "category": "camera.rgbd",
+  "readiness": "validated",
+  "discovery": {
+    "transport": "usb",
+    "vendor_ids": ["8086"],
+    "product_name_contains": ["RealSense"]
+  },
+  "host_requirements": {
+    "operating_system": "Ubuntu 22.04",
+    "architectures": ["aarch64", "x86_64"],
+    "jetpack": ["6.2.3"],
+    "l4t": ["36.5.2"],
+    "container_runtime": "docker",
+    "kernel_backends": ["rsusb", "v4l2"]
+  },
+  "edge_plugin": {
+    "distribution": "robot-hardware-realsense",
+    "version": "0.1.0",
+    "entry_point_group": "robot_platform.hardware_adapters",
+    "entry_point": "realsense",
+    "dependency_policy": "stdlib-only",
+    "wheel_file": "dist/robot_hardware_realsense-0.1.0-py3-none-any.whl",
+    "wheel_sha256": "4dabedc238dd67d03283656db2d55011b59fc2392273065e6557a9ca998f2392"
+  },
+  "runtime": {
+    "isolation": "oci",
+    "image": "robot-platform/realsense-runtime:0.1.0-wheel",
+    "librealsense": "2.58.4",
+    "sdk_distribution": "official-pypi-wheel",
+    "backend": "official_pypi_wheel_validated",
+    "entrypoints": {
+      "probe": "/opt/robot-runtime/probe.py",
+      "camera_runtime": "/opt/robot-runtime/camera_runtime.py"
+    },
+    "network": "none",
+    "devices": ["/dev/video*", "/dev/media*", "/dev/bus/usb"],
+    "device_cgroup_rules": ["c 81:* rw", "c 189:* rw"],
+    "source_build_backends": ["v4l2", "rsusb"]
+  },
+  "outputs": [
+    {"name": "color", "data_type": "image.rgb8.v1"},
+    {"name": "depth", "data_type": "image.depth16.v1", "required": false},
+    {"name": "camera_info", "data_type": "camera.intrinsics.v1"}
+  ],
+  "parameters": [
+    {
+      "key": "serial",
+      "label": "RealSense设备",
+      "value_type": "string",
+      "default": "",
+      "binding_source": "target_hardware_devices"
+    },
+    {
+      "key": "width",
+      "label": "图像宽度",
+      "value_type": "integer",
+      "default": 640,
+      "visible": false
+    },
+    {
+      "key": "height",
+      "label": "图像高度",
+      "value_type": "integer",
+      "default": 480,
+      "visible": false
+    },
+    {
+      "key": "fps",
+      "label": "目标帧率",
+      "value_type": "integer",
+      "default": 30,
+      "minimum": 1,
+      "maximum": 60
+    }
+  ],
+  "profiles": ["profiles/d415.json"]
+}

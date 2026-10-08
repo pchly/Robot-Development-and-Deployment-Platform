@@ -1,0 +1,41 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "robot-mujoco-arm-runtime"
+version = "0.4.0"
+description = "MuJoCo six-axis virtual arm runtime for the robot development platform"
+readme = "README.md"
+requires-python = ">=3.10,<3.15"
+dependencies = [
+    "mujoco==3.14.0",
+    "numpy>=2.0,<3",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3,<9",
+    "pytest-cov>=6,<7",
+    "ruff>=0.11,<1",
+]
+
+[project.scripts]
+robot-mujoco-arm = "robot_mujoco_arm.__main__:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/robot_mujoco_arm"]
+
+[tool.pytest.ini_options]
+addopts = "--cov=robot_mujoco_arm --cov-report=term-missing --cov-fail-under=85"
+testpaths = ["tests"]
+
+[tool.coverage.run]
+omit = ["src/robot_mujoco_arm/__main__.py"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]

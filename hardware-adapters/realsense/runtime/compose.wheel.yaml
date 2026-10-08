@@ -1,0 +1,17 @@
+name: robot-platform-realsense-validation
+
+services:
+  realsense-probe:
+    build:
+      context: .
+      dockerfile: Dockerfile.wheel
+      args:
+        BASE_IMAGE: "${REALSENSE_BASE_IMAGE:-nvcr.io/nvidia/l4t-base:r36.2.0}"
+        PYREALSENSE_WHEEL: pyrealsense2-2.58.4.10922-cp310-cp310-manylinux2014_aarch64.whl
+    image: robot-platform/realsense-runtime:0.1.0-wheel
+    network_mode: none
+    volumes:
+      - /dev:/dev
+    device_cgroup_rules:
+      - "c 81:* rw"
+      - "c 189:* rw"

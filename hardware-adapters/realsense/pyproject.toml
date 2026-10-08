@@ -1,0 +1,31 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "robot-hardware-realsense"
+version = "0.1.0"
+description = "RealSense硬件发现与控制面适配插件"
+readme = "README.md"
+requires-python = ">=3.10,<3.15"
+dependencies = ["robot-edge-agent>=0.4.1,<1"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.3,<9", "ruff>=0.11,<1"]
+
+[project.entry-points."robot_platform.hardware_adapters"]
+realsense = "robot_hardware_realsense.adapter:RealSenseAdapter"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/robot_hardware_realsense"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src", "../../services/edge-agent/src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]

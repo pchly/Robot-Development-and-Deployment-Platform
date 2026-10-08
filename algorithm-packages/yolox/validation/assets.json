@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0",
+  "sample_image": {
+    "name": "YOLOX official dog demo image",
+    "source": "https://raw.githubusercontent.com/Megvii-BaseDetection/YOLOX/main/assets/dog.jpg",
+    "license": "Apache-2.0 project asset",
+    "filename": "dog.jpg",
+    "size_bytes": 163759,
+    "sha256": "5a9522051c3cec2bbd2f6323fccba32e8fbf3ddcc2b3e2fd46b04c720bc6f866"
+  }
+}

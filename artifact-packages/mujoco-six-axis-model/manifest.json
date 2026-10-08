@@ -1,0 +1,10 @@
+{
+  "schema_version": "1.1",
+  "artifact_id": "simulation.mujoco.arm.model.six-axis",
+  "name": "MuJoCo 六轴机械臂仿真模型",
+  "kind": "simulation_asset",
+  "scope": "build_source",
+  "version": "0.1.0",
+  "locator": "simulation-runtimes/mujoco-arm/src/robot_mujoco_arm/models/virtual_arm.xml",
+  "source_ref": "simulation.mujoco.arm"
+}

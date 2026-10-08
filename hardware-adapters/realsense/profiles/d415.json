@@ -1,0 +1,44 @@
+{
+  "profile_id": "realsense.d415",
+  "model": "Intel RealSense D415",
+  "usb": {
+    "vendor_id": "8086",
+    "product_ids": ["0ad3"],
+    "minimum_speed_mbps": 5000
+  },
+  "validated_device": {
+    "sdk_serial": "125322060182",
+    "transport_serial": "123423024767",
+    "asic_serial": "123423024767",
+    "firmware_update_id": "123423024767",
+    "firmware": "5.13.0.50",
+    "status": "rgb_depth_stream_validated"
+  },
+  "validation": {
+    "streams": "color_rgb8_and_depth_z16",
+    "width": 640,
+    "height": 480,
+    "configured_fps": 30,
+    "warmup_frames": 30,
+    "sample_frames": 300,
+    "observed_fps": 29.5455,
+    "host_hotplug_discovery": "passed",
+    "reopen_after_replug": "passed",
+    "replug_speed_mbps": 5000,
+    "post_replug_observed_fps": 29.3467,
+    "runtime_auto_recovery": "passed",
+    "validated_recovery_count": 1,
+    "post_recovery_frames": 60,
+    "soak_5min": {
+      "status": "passed",
+      "elapsed_s": 300.809,
+      "frames_received": 8900,
+      "steady_fps": 29.76,
+      "recovery_count": 0
+    }
+  },
+  "default_streams": {
+    "color": {"width": 640, "height": 480, "fps": 30, "format": "rgb8"},
+    "depth": {"width": 640, "height": 480, "fps": 30, "format": "z16"}
+  }
+}

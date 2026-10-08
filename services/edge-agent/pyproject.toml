@@ -1,0 +1,39 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "robot-edge-agent"
+version = "0.21.0"
+description = "机器人开发平台边缘执行端"
+readme = "README.md"
+requires-python = ">=3.10,<3.15"
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3,<9",
+    "pytest-cov>=6,<7",
+    "ruff>=0.11,<1",
+]
+
+[project.scripts]
+robot-edge-agent = "robot_edge_agent.__main__:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/robot_edge_agent"]
+
+[tool.pytest.ini_options]
+addopts = "--basetemp=.pytest-tmp --cov=robot_edge_agent --cov-report=term-missing --cov-fail-under=90"
+testpaths = ["tests"]
+
+[tool.coverage.run]
+omit = ["src/robot_edge_agent/__main__.py"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
